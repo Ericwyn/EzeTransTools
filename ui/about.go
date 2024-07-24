@@ -53,6 +53,7 @@ func showAboutUi() {
 		container.NewCenter(icon),
 		container.NewHBox(widget.NewLabel("")),
 		container.NewHBox(widget.NewLabel("当前版本:"), widget.NewLabel(conf.Version+"-"+conf.ReleaseDate)),
+		container.NewHBox(widget.NewLabel("Fyne版本:"), widget.NewLabel(conf.FyneVersion)),
 		container.NewHBox(widget.NewLabel("软件作者:"), widget.NewLabel("github.com/Ericwyn")),
 		container.NewHBox(widget.NewLabel("")),
 		container.NewCenter(container.NewHBox(githubBtn, issueBtn)),

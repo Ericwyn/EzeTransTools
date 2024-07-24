@@ -8,7 +8,8 @@ import (
 )
 
 const Version = "V1.6-Release"
-const ReleaseDate = "2024.03.01"
+const ReleaseDate = "2024.07.24"
+const FyneVersion = "v2.5.0"
 
 const ConfigKeyMiniMode = "miniMode"
 const ConfigKeyBaiduTransAppId = "baiduTransAppId"
