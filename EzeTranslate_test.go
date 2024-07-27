@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/Ericwyn/EzeTranslate/conf"
 	"github.com/Ericwyn/EzeTranslate/strutils"
-	"github.com/Ericwyn/EzeTranslate/trans/google"
-	"github.com/Ericwyn/EzeTranslate/trans/youdao"
 	"testing"
 )
 
@@ -35,30 +33,4 @@ func TestFormatCamelCaseText(t *testing.T) {
 	e := "Con_F_Key"
 	fmt.Println(e, "->", strutils.FormatCamelCaseText(e))
 
-}
-
-func TestGoogleTrans(t *testing.T) {
-	conf.InitConfig()
-
-	google.Translate("你好啊", func(result string, note string) {
-		fmt.Println("你好啊 -> " + result)
-		fmt.Println(note)
-	})
-
-	google.Translate("hello", func(result string, note string) {
-		fmt.Println("hello -> " + result)
-		fmt.Println(note)
-	})
-}
-
-func TestYoudaoTrans(t *testing.T) {
-	conf.InitConfig()
-
-	youdao.Translate("你好啊", func(result string, note string) {
-		fmt.Println("你好啊 -> " + result)
-	})
-
-	youdao.Translate("hello", func(result string, note string) {
-		fmt.Println("hello -> " + result)
-	})
 }

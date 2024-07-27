@@ -8,7 +8,6 @@ require (
 )
 
 require (
-	github.com/Ericwyn/go-googletrans v0.0.0-20221019035537-19b8f12527fb
 	github.com/fyne-io/image v0.0.0-20221020213044-f609c6a24345 // indirect
 	github.com/spf13/viper v1.9.0
 )

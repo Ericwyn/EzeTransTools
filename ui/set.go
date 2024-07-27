@@ -68,7 +68,7 @@ func showSetUi() {
 			{Text: "有道 AppId    ", Widget: youdaoAppIdEntry, HintText: "请填写从有道处申请到的 AppId"},
 			{Text: "有道 AppSecret", Widget: youdaoAppSecretEntry, HintText: "请填写从有道处申请到的 AppSecret"},
 			{Text: "", Widget: widget.NewLabel(""), HintText: ""},
-			{Text: "Google Url", Widget: googleTranslateUrlEntry, HintText: "google 翻译的服务地址, 默认为 translate.google.com"},
+			{Text: "Google Url", Widget: googleTranslateUrlEntry, HintText: "google 翻译的服务地址, 默认为 https://translate.googleapis.com"},
 			{Text: "Http 代理", Widget: googleTranslateProxyEntry, HintText: "google 翻译的 Http 代理, 如 Http://127.0.0.1:1080"},
 			{Text: "", Widget: widget.NewLabel(""), HintText: ""},
 			{Text: "OpenAI Url", Widget: openAIApiUrlEntry, HintText: "OpenAI 的接口地址, 默认为 https://api.openai.com/v1/chat/completions"},

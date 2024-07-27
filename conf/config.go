@@ -33,8 +33,6 @@ const ConfigKeyFormatCamelCase = "formatCamelCase"
 // ConfigKeyTranslateSelect 选择哪个翻译
 const ConfigKeyTranslateSelect = "translateSelect"
 
-// const ConfigKeyTranslateToLang = "translateToLang"
-
 // ToLang 翻译的目标语言直接存在内存里面, 每次启动的时候我们默认设置为 ""
 var ToLang = ""
 
@@ -52,13 +50,12 @@ func InitConfig() {
 	viper.SetDefault(ConfigKeyYouDaoTransAppSecret, "youdaoTransAppSecret-xxxxxxxxxxxxxxx")
 
 	viper.SetDefault(ConfigKeyGoogleTranslateProxy, "")
-	viper.SetDefault(ConfigKeyGoogleTranslateUrl, "translate.google.com")
+	viper.SetDefault(ConfigKeyGoogleTranslateUrl, "https://translate.googleapis.com")
 
 	viper.SetDefault(ConfigKeyOpenAIApiUrl, "https://api.openai.com/v1/chat/completions")
 	viper.SetDefault(ConfigKeyOpenAiKey, "openAiKey-xxxxxxxxxxxxxxx")
 
-	viper.SetDefault(ConfigKeyTranslateSelect, "google")
-	//viper.SetDefault(ConfigKeyTranslateToLang, "")
+	viper.SetDefault(ConfigKeyTranslateSelect, "openai")
 
 	viper.SetDefault(ConfigKeyFormatSpace, false)
 	viper.SetDefault(ConfigKeyFormatCarriageReturn, false)

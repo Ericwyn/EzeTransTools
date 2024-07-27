@@ -5,33 +5,30 @@ import (
 	"github.com/Ericwyn/EzeTranslate/log"
 	"github.com/Ericwyn/EzeTranslate/strutils"
 	"github.com/Ericwyn/EzeTranslate/trans"
-	translator "github.com/Ericwyn/go-googletrans"
 	"github.com/spf13/viper"
 )
 
-var translateApi *translator.TranslateApi
+var translator *Translator
 
-func generalTransApi() *translator.TranslateApi {
-	var translatorConfig = translator.TranslateConfig{}
-
+func initTranslator() Translator {
+	var googleApiUrl, translatorHttpProxy string
 	if viper.GetString(conf.ConfigKeyGoogleTranslateUrl) != "" {
-		var url = viper.GetString(conf.ConfigKeyGoogleTranslateUrl)
-		translatorConfig.ServiceUrls = []string{url}
-		log.I("为 google 翻译设置 URL:" + url)
+		googleApiUrl = viper.GetString(conf.ConfigKeyGoogleTranslateUrl)
+		log.I("为 google 翻译设置 URL:" + googleApiUrl)
 	}
 
 	if viper.GetString(conf.ConfigKeyGoogleTranslateProxy) != "" {
-		var proxy = viper.GetString(conf.ConfigKeyGoogleTranslateProxy)
-		translatorConfig.Proxy = proxy
-		log.I("为 google 翻译设置代理:" + proxy)
+		translatorHttpProxy = viper.GetString(conf.ConfigKeyGoogleTranslateProxy)
+		log.I("为 google 翻译设置代理:" + translatorHttpProxy)
 	}
 
-	return translator.New(translatorConfig)
+	return NewTranslatorWithConfig(googleApiUrl, translatorHttpProxy)
 }
 
 func Translate(str string, toLang strutils.Lang, transCallback trans.TransResCallback) {
-	if translateApi == nil {
-		translateApi = generalTransApi()
+	if translator == nil {
+		t := initTranslator()
+		translator = &t
 	}
 
 	log.D("Google 翻译文字:", str)
@@ -55,25 +52,25 @@ func Translate(str string, toLang strutils.Lang, transCallback trans.TransResCal
 		// 中文较多的时候，都会翻译成英文句子
 		log.D("翻译中文句子为英文")
 		note = "zh -> en"
-		result, err := translateApi.Translate(str, "auto", "en")
+		result, err := translator.Translate(str, "auto", "en")
 		if err != nil {
 			//err.Error()
 			log.E(err.Error())
 			transCallback("翻译错误, 请查看日志", note)
 			return
 		}
-		transRes = result.Text
-		note = result.Src + "->" + result.Dest
+		transRes = result
+		note = "auto -> en"
 	} else {
 		note = "en -> zh"
-		result, err := translateApi.Translate(str, "auto", "zh-cn")
+		result, err := translator.Translate(str, "auto", "zh-cn")
 		if err != nil {
 			log.E(err.Error())
 			transCallback("翻译错误, 请查看日志", note)
 			return
 		}
-		transRes = result.Text
-		note = result.Src + "->" + result.Dest
+		transRes = result
+		note = "auto -> zh-cn"
 	}
 	transCallback(transRes, note)
 }
