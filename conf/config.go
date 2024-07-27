@@ -7,8 +7,8 @@ import (
 	"path"
 )
 
-const Version = "V1.6-Release"
-const ReleaseDate = "2024.07.24"
+const Version = "V1.7-Release"
+const ReleaseDate = "2024.07.26"
 const FyneVersion = "v2.5.0"
 
 const ConfigKeyMiniMode = "miniMode"
@@ -21,6 +21,10 @@ const ConfigKeyYouDaoTransAppSecret = "youdaoTransAppSecret"
 const ConfigKeyGoogleTranslateProxy = "googleTranslateProxy"
 const ConfigKeyGoogleTranslateUrl = "googleTranslateUrl"
 
+const ConfigKeyOpenAIApiUrl = "openAiApiUrl"
+const ConfigKeyOpenAiKey = "openAiKey"
+const ConfigKeyOpenAiModel = "openAiModel"
+
 const ConfigKeyFormatSpace = "formatSpace"
 const ConfigKeyFormatCarriageReturn = "formatCarriageReturn"
 const ConfigKeyFormatAnnotation = "formatAnnotation"
@@ -28,6 +32,11 @@ const ConfigKeyFormatCamelCase = "formatCamelCase"
 
 // ConfigKeyTranslateSelect 选择哪个翻译
 const ConfigKeyTranslateSelect = "translateSelect"
+
+// const ConfigKeyTranslateToLang = "translateToLang"
+
+// ToLang 翻译的目标语言直接存在内存里面, 每次启动的时候我们默认设置为 ""
+var ToLang = ""
 
 const configFileDirName = "EzeTranslate"
 const configFileName = "config"
@@ -44,7 +53,12 @@ func InitConfig() {
 
 	viper.SetDefault(ConfigKeyGoogleTranslateProxy, "")
 	viper.SetDefault(ConfigKeyGoogleTranslateUrl, "translate.google.com")
+
+	viper.SetDefault(ConfigKeyOpenAIApiUrl, "https://api.openai.com/v1/chat/completions")
+	viper.SetDefault(ConfigKeyOpenAiKey, "openAiKey-xxxxxxxxxxxxxxx")
+
 	viper.SetDefault(ConfigKeyTranslateSelect, "google")
+	//viper.SetDefault(ConfigKeyTranslateToLang, "")
 
 	viper.SetDefault(ConfigKeyFormatSpace, false)
 	viper.SetDefault(ConfigKeyFormatCarriageReturn, false)

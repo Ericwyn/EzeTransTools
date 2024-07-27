@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/Ericwyn/EzeTranslate/conf"
 	"github.com/Ericwyn/EzeTranslate/log"
+	"github.com/Ericwyn/EzeTranslate/strutils"
 	"github.com/Ericwyn/EzeTranslate/trans"
 	"github.com/spf13/viper"
 	"math/rand"
@@ -194,39 +195,18 @@ func getError(errCode string) error {
 	return errors.New(fmt.Sprintf("[%s] %s", errCode, s))
 }
 
-func Translate(str string, transCallback trans.TransResCallback) {
+func Translate(str string, toLang strutils.Lang, transCallback trans.TransResCallback) {
 	log.D("youdao 翻译文字:", str)
 
 	from := lAuto
-	to := lAuto
-
-	//note := "auto -> auto"
-	//runeStr := []rune(str)
-	//
-	//// 判断 str 是否包含中文
-	//strLen := 0.0
-	//hanLen := 0.0
-	//
-	//strLen += float64(len(runeStr))
-	//
-	//for _, c := range str {
-	//	if unicode.Is(unicode.Han, c) {
-	//		hanLen += 1
-	//	}
-	//}
-	//log.D("总长度:", len(str), "汉字长度:", hanLen)
-	//
-	//percentHan := hanLen / strLen
-	//if percentHan > 0.5 {
-	//	from = lChinese
-	//	to = lEnglish
-	//
-	//	note = "auto -> en"
-	//} else {
-	//	from = lEnglish
-	//	to = lChinese
-	//	note = "auto -> zh"
-	//}
+	var to string
+	if toLang == strutils.Chinese {
+		to = lChinese
+	} else if toLang == strutils.English {
+		to = lEnglish
+	} else {
+		to = lAuto
+	}
 
 	resJson, e := queryYoudaoApi(from, to, str)
 

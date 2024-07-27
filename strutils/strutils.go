@@ -1,10 +1,12 @@
 package strutils
 
 import (
+	"encoding/json"
 	"github.com/Ericwyn/EzeTranslate/conf"
 	"github.com/Ericwyn/EzeTranslate/log"
 	"github.com/spf13/viper"
 	"strings"
+	"unicode"
 )
 
 // 去除 startStr 开头, 如果 startStr 前面有空格, 也会一起去除
@@ -120,4 +122,44 @@ func FormatCamelCaseText(str string) string {
 	log.D("驼峰优化", str, "->", res)
 
 	return res
+}
+
+func ToJson(msg interface{}) string {
+	marshal, err := json.Marshal(msg)
+	if err != nil {
+		log.E("json marshal error: ", msg, err)
+		return ""
+	}
+	return string(marshal)
+}
+
+type Lang string
+
+const (
+	English Lang = "english"
+	Chinese Lang = "chinese"
+	Unknown Lang = "unknown"
+)
+
+// DetectLanguage 判断输入的是否是中文
+func DetectLanguage(text string) Lang {
+	var chineseCount, englishCount int
+
+	for _, r := range text {
+		if unicode.Is(unicode.Han, r) {
+			// 一个汉字算 2 个字符
+			chineseCount += 2
+		} else if unicode.IsLetter(r) && r <= unicode.MaxASCII {
+			englishCount++
+		}
+	}
+
+	if chineseCount > englishCount {
+		return Chinese
+	} else if englishCount > chineseCount {
+		return English
+	} else {
+		// You can add more sophisticated logic here
+		return Unknown
+	}
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"runtime"
+	"time"
 )
 
 // 翻译入口页面
@@ -48,7 +49,7 @@ func showHomeUi(showAndRun bool) {
 	homeWindow.SetMainMenu(createAppMenu())
 
 	homeWindow.Resize(fyne.Size{
-		Width:  400,
+		Width:  450,
 		Height: 600,
 	})
 	homeWindow.CenterOnScreen()
@@ -65,19 +66,21 @@ func showHomeUi(showAndRun bool) {
 	homeInputBoxPanel = container.NewBorder(inputBoxPanelTitle, nil, nil, nil,
 		container.NewGridWithColumns(1, homeInputBox))
 
+	// api 选择
 	transResBoxPanelTitle := buildTransApiCheckBox()
 
 	homeTransResBox = widget.NewMultiLineEntry()
 	homeTransResBox.SetPlaceHolder(`等待翻译中...`)
 	homeTransResBox.Wrapping = fyne.TextWrapBreak
 
-	homeTransResBoxPanel = container.NewBorder(transResBoxPanelTitle, nil, nil, nil,
+	homeTransResBoxPanel = container.NewBorder(
+		transResBoxPanelTitle, nil, nil, nil,
 		container.NewGridWithColumns(1, homeTransResBox))
 
 	homeNoteLabel = widget.NewLabel("")
 
 	bottomPanel := container.NewHBox(
-		widget.NewButton("翻译当前文字", func() {
+		widget.NewButton("执行翻译", func() {
 			startTrans()
 		}),
 	)
@@ -111,10 +114,15 @@ func showHomeUi(showAndRun bool) {
 			}),
 		)
 	}
+
+	bottomPanel.Add(buildToLangDropDown() /*目标语种选择*/)
 	bottomPanel.Add(homeNoteLabel)
 
 	mainPanel := container.NewBorder(nil, bottomPanel, nil, nil,
 		container.NewGridWithColumns(1, homeInputBoxPanel, homeTransResBoxPanel))
+
+	// 尝试延迟 300ms 设置 content, 避免异常尺寸
+	time.Sleep(300 * time.Millisecond)
 
 	homeWindow.SetContent(mainPanel)
 
@@ -143,4 +151,10 @@ func closeHomeUi() {
 	homeTransResBoxPanel = nil
 	homeTransResBox = nil
 	homeNoteLabel = nil
+}
+
+func homeUiClosed() {
+	if homeWindow != nil {
+		homeWindow.SetOnClosed(func() {})
+	}
 }

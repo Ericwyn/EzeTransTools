@@ -48,6 +48,18 @@ func showSetUi() {
 	googleTranslateUrlEntry.SetPlaceHolder("Google 翻译服务地址")
 	googleTranslateUrlEntry.SetText(viper.GetString(conf.ConfigKeyGoogleTranslateUrl))
 
+	openAIApiUrlEntry := widget.NewEntry()
+	openAIApiUrlEntry.SetPlaceHolder("OpenAI 的接口地址")
+	openAIApiUrlEntry.SetText(viper.GetString(conf.ConfigKeyOpenAIApiUrl))
+
+	openAIApiKeyEntry := widget.NewEntry()
+	openAIApiKeyEntry.SetPlaceHolder("OpenAI 的 Key")
+	openAIApiKeyEntry.SetText(viper.GetString(conf.ConfigKeyOpenAiKey))
+
+	openAIApiModelEntry := widget.NewEntry()
+	openAIApiModelEntry.SetPlaceHolder("OpenAI 的模型")
+	openAIApiModelEntry.SetText(viper.GetString(conf.ConfigKeyOpenAiModel))
+
 	form := &widget.Form{
 		Items: []*widget.FormItem{
 			{Text: "百度 AppId    ", Widget: baiduAppIdEntry, HintText: "请填写从百度处申请到的 AppId"},
@@ -58,6 +70,10 @@ func showSetUi() {
 			{Text: "", Widget: widget.NewLabel(""), HintText: ""},
 			{Text: "Google Url", Widget: googleTranslateUrlEntry, HintText: "google 翻译的服务地址, 默认为 translate.google.com"},
 			{Text: "Http 代理", Widget: googleTranslateProxyEntry, HintText: "google 翻译的 Http 代理, 如 Http://127.0.0.1:1080"},
+			{Text: "", Widget: widget.NewLabel(""), HintText: ""},
+			{Text: "OpenAI Url", Widget: openAIApiUrlEntry, HintText: "OpenAI 的接口地址, 默认为 https://api.openai.com/v1/chat/completions"},
+			{Text: "OpenAI Key", Widget: openAIApiKeyEntry, HintText: "OpenAI 的接口 Key"},
+			{Text: "OpenAI Model", Widget: openAIApiModelEntry, HintText: "OpenAI 的接口模型"},
 			{Text: "", Widget: widget.NewLabel(""), HintText: ""},
 			{Text: "配置文件地址", Widget: widget.NewLabel(conf.GetConfigFilePath()), HintText: ""},
 			{Text: "", Widget: widget.NewLabel(""), HintText: ""},
@@ -74,6 +90,10 @@ func showSetUi() {
 
 			viper.Set(conf.ConfigKeyGoogleTranslateUrl, googleTranslateUrlEntry.Text)
 			viper.Set(conf.ConfigKeyGoogleTranslateProxy, googleTranslateProxyEntry.Text)
+
+			viper.Set(conf.ConfigKeyOpenAIApiUrl, openAIApiUrlEntry.Text)
+			viper.Set(conf.ConfigKeyOpenAiKey, openAIApiKeyEntry.Text)
+			viper.Set(conf.ConfigKeyOpenAiModel, openAIApiModelEntry.Text)
 
 			err := viper.WriteConfig()
 			if err != nil {

@@ -13,6 +13,7 @@ import (
 	"github.com/Ericwyn/EzeTranslate/trans"
 	"github.com/Ericwyn/EzeTranslate/trans/baidu"
 	"github.com/Ericwyn/EzeTranslate/trans/google"
+	"github.com/Ericwyn/EzeTranslate/trans/openai"
 	"github.com/Ericwyn/EzeTranslate/trans/youdao"
 	"github.com/Ericwyn/EzeTranslate/ui/resource"
 	"github.com/Ericwyn/GoTools/shell"
@@ -112,12 +113,16 @@ func startTrans() {
 		resNoteLabel.SetText(note)
 	}
 
+	var toLang = strutils.Lang(conf.ToLang)
+
 	if viper.GetString(conf.ConfigKeyTranslateSelect) == "google" {
-		go google.Translate(formatText, handleTransResult)
+		go google.Translate(formatText, toLang, handleTransResult)
 	} else if viper.GetString(conf.ConfigKeyTranslateSelect) == "baidu" {
-		go baidu.Translate(formatText, handleTransResult)
+		go baidu.Translate(formatText, toLang, handleTransResult)
 	} else if viper.GetString(conf.ConfigKeyTranslateSelect) == "youdao" {
-		go youdao.Translate(formatText, handleTransResult)
+		go youdao.Translate(formatText, toLang, handleTransResult)
+	} else if viper.GetString(conf.ConfigKeyTranslateSelect) == "openai" {
+		go openai.Translate(formatText, toLang, handleTransResult)
 	}
 
 }
@@ -239,4 +244,11 @@ func setOcrTextToInputBox() bool {
 	}
 
 	return true
+}
+
+func closeMiniWindow() {
+	if miniWindow != nil {
+		miniWindow.Close()
+		miniWindow = nil
+	}
 }

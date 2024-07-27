@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/Ericwyn/EzeTranslate/conf"
 	"github.com/Ericwyn/EzeTranslate/log"
+	"github.com/Ericwyn/EzeTranslate/strutils"
 	"github.com/Ericwyn/EzeTranslate/trans"
 	"github.com/spf13/viper"
 	"io/ioutil"
@@ -47,14 +48,22 @@ type TransResult struct {
 var baiduAppId string
 var baiduAppSecret string
 
-func translate(word string) []byte { //调用api进行翻译
+func translate(word string, toLang strutils.Lang) []byte { //调用api进行翻译
 	baiduAppId = viper.GetString(conf.ConfigKeyBaiduTransAppId)
 	baiduAppSecret = viper.GetString(conf.ConfigKeyBaiduTransAppSecret)
 
 	data := make(url.Values)
 	data["q"] = []string{word}
 	data["from"] = []string{"auto"}
-	data["to"] = []string{"auto"}
+
+	if toLang == strutils.English {
+		data["to"] = []string{"en"}
+	} else if toLang == strutils.Chinese {
+		data["to"] = []string{"zh"}
+	} else {
+		data["to"] = []string{"auto"}
+	}
+
 	data["appid"] = []string{baiduAppId}
 	salt := "65"
 	data["salt"] = []string{salt}
@@ -71,11 +80,11 @@ func translate(word string) []byte { //调用api进行翻译
 	return body
 }
 
-func Translate(words string, callback trans.TransResCallback) { //翻译函数
+func Translate(words string, toLang strutils.Lang, callback trans.TransResCallback) { //翻译函数
 
 	log.D("Baidu 翻译文字:", words)
 
-	body := translate(words)
+	body := translate(words, toLang)
 
 	log.D("翻译结果", string(body))
 

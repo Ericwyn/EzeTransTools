@@ -3,10 +3,10 @@ package google
 import (
 	"github.com/Ericwyn/EzeTranslate/conf"
 	"github.com/Ericwyn/EzeTranslate/log"
+	"github.com/Ericwyn/EzeTranslate/strutils"
 	"github.com/Ericwyn/EzeTranslate/trans"
 	translator "github.com/Ericwyn/go-googletrans"
 	"github.com/spf13/viper"
-	"unicode"
 )
 
 var translateApi *translator.TranslateApi
@@ -29,41 +29,29 @@ func generalTransApi() *translator.TranslateApi {
 	return translator.New(translatorConfig)
 }
 
-func Translate(str string, transCallback trans.TransResCallback) {
+func Translate(str string, toLang strutils.Lang, transCallback trans.TransResCallback) {
 	if translateApi == nil {
 		translateApi = generalTransApi()
 	}
 
 	log.D("Google 翻译文字:", str)
-
-	// 判断 str 是否包含中文
-	strLen := 0.0
-	hanLen := 0.0
-
-	for _, c := range str {
-		strLen += 1
-		if unicode.Is(unicode.Han, c) {
-			hanLen += 1
+	fromLang := strutils.DetectLanguage(str)
+	if toLang == "" {
+		if fromLang == strutils.Chinese {
+			toLang = strutils.English
+		} else {
+			toLang = strutils.Chinese
 		}
 	}
-	log.D("总长度:", len(str), "汉字长度:", hanLen)
+	if fromLang == toLang {
+		transCallback(str, string(fromLang+"->"+toLang))
+		return
+	}
+	var note string
+	var transRes string
 
-	percentHan := hanLen / strLen
-
-	transRes := ""
-
-	// 有中文的时候，就翻译成英文
-
-	// 纯中文
-	// 中英文
-	// 翻译成英语
-
-	// 纯英文
-	// 翻译成
-
-	note := ""
 	//var err error
-	if percentHan > 0.5 {
+	if strutils.English == toLang {
 		// 中文较多的时候，都会翻译成英文句子
 		log.D("翻译中文句子为英文")
 		note = "zh -> en"

@@ -101,3 +101,29 @@ func CreateCheckGroup(labelsAndInit []LabelAndInit, h bool, singleCheck bool, cl
 	}
 
 }
+
+func CreateDropDown(labelsAndInit []LabelAndInit, clickCallback CheckedGroupClickCallback) *fyne.Container {
+	options := make([]string, len(labelsAndInit))
+	var selectedOption string
+
+	for i, item := range labelsAndInit {
+		options[i] = item.Label
+		if item.InitCheck {
+			selectedOption = item.Label
+		}
+	}
+
+	selectWidget := widget.NewSelect(options, func(selected string) {
+		for _, item := range labelsAndInit {
+			if item.Label == selected {
+				clickCallback(item.Label, true)
+			} else {
+				clickCallback(item.Label, false)
+			}
+		}
+	})
+
+	selectWidget.SetSelected(selectedOption)
+
+	return container.NewVBox(selectWidget)
+}
