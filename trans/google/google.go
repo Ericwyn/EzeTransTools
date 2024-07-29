@@ -15,6 +15,8 @@ func initTranslator() Translator {
 	if viper.GetString(conf.ConfigKeyGoogleTranslateUrl) != "" {
 		googleApiUrl = viper.GetString(conf.ConfigKeyGoogleTranslateUrl)
 		log.I("为 google 翻译设置 URL:" + googleApiUrl)
+	} else {
+		googleApiUrl = "https://translate.googleapis.com"
 	}
 
 	if viper.GetString(conf.ConfigKeyGoogleTranslateProxy) != "" {
